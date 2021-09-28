@@ -1,7 +1,7 @@
 # this is a simpleish script to use the graph api to collect the headers from an email
 # knowing the message-id of the email and mailbox where the email is sitting
 #
-# Usage: .\Get-MailHeaders.ps1 -MessageId "<interesting-message-id@domain.org>" -Mailbox "upn-of-mailbox@domain.org" -Tenant domain.onmicrosoft.com -Format Table
+# Usage: .\Get-MailHeaders.ps1 -MessageId "<interesting-message-id@domain.org>" -Mailbox "upn-of-mailbox@domain.org" -Tenant contoso -Format List
 [CmdletBinding()]
 param (
     [Parameter(Mandatory=$True)]
