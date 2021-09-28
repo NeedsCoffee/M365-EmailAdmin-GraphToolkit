@@ -11,8 +11,7 @@ param (
     [string]
     $Mailbox,
     [Parameter(Mandatory=$False)]
-    #[ValidateSet('tenant1', 'tenant2', 'tenant3')]
-    [String[]]
+    [String]
     $Tenant = "contoso", # the bit before .onmicrosoft.com, e.g. contoso.onmicrosoft.com
     [Parameter(Mandatory=$False)]
     [ValidateSet('Table', 'GridView', 'List', 'Raw')]
