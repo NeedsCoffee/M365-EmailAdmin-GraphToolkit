@@ -19,26 +19,32 @@ param (
     $Format = "Table"
 )
 
-if(-not (Get-InstalledModule -Name Microsoft.Graph -ErrorAction SilentlyContinue)){
-    Write-Host "Installing Microsoft.Graph modules..."
-    Install-Module -Name Microsoft.Graph -Scope CurrentUser
+if(-not (Get-InstalledModule -Name Microsoft.Graph.Mail -ErrorAction SilentlyContinue)){
+    Write-Host "Installing required Microsoft.Graph modules..."
+    Install-Module -Name Microsoft.Graph.Authentication -Scope CurrentUser
+    Install-Module -Name Microsoft.Graph.Mail -Scope CurrentUser
 }
 
-if(Get-Command Graph){
+if(Get-Command Graph -ErrorAction SilentlyContinue){
     # this is a function I setup just to simplify the connection
     Graph -tenant $tenant
 } else {
-    Import-Module Microsoft.Graph
+    Import-Module Microsoft.Graph.Authentication,Microsoft.Graph.Mail
     $splat = @{
         # these should be changed to values relevant to your app/tenant
-        $clientid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"     # the clientid of an app with the permissions needed
-        $certhumb = "0000000000000000000000000000000000000000" # thumbprint of a certificate credential used with the app
-        $tenantid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"     # the tenant of the app, can be contoso.onmicrosoft.com format
+        clientid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"     # the clientid of an app with the permissions needed
+        certhumb = "0000000000000000000000000000000000000000" # thumbprint of a certificate credential used with the app
+        tenantid = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"     # the tenant of the app, can be contoso.onmicrosoft.com format
     }
     Try {
-        Connect-MgGraph @splat
-    } Catch { # laziest error catching ever!
-        Connect-MgGraph -UseDeviceAuthentication
+        if($splat.clientid -ne "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"){
+            Connect-MgGraph @splat
+        } else {
+            Connect-MgGraph -UseDeviceAuthentication
+        }
+    } Catch {
+        $_ | Write-Error
+        break
     }
 }
 
