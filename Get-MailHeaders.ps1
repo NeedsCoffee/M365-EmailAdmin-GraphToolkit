@@ -40,7 +40,7 @@ if(Get-Command Graph -ErrorAction SilentlyContinue){
         if($splat.clientid -ne "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"){
             Connect-MgGraph @splat
         } else {
-            Connect-MgGraph -UseDeviceAuthentication
+            Throw "Can't connect to Graph, script has not been configured"
         }
     } Catch {
         $_ | Write-Error
